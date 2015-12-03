@@ -15,12 +15,12 @@ public class ExperimentRunner {
 	public static void main(String[] args) {
 		// Take in the input files and an algorithm, run UCB on it.
 		UCB algo = new UCB(0.8);
-		String dF = args;
+		String[] dF = args;
 		int t = 10000;
 		ExperimentRunner expR = new ExperimentRunner(algo, dF, t);
 		double ctr = expR.runAlgorithm();
 		System.out.println("UCB achieved a CTR of " + ctr + " in "
-				+ t + "trials");
+				+ t + " trials");
 	}
 
 	public ExperimentRunner(BanditAlgorithm algo, String[] dF, int t) {
@@ -75,7 +75,7 @@ public class ExperimentRunner {
 		String choice = "";
 		do {
 			String curLine = readNextLine();
-			String[] articles = curLine.split(" |");
+			String[] articles = curLine.split(" \\|");
 			articleId = articles[0].split(" ")[1];
 			r_t = articles[0].split(" ")[2].equals("1");
 			// Yank out the articles, send them to the bandit
@@ -88,7 +88,10 @@ public class ExperimentRunner {
 			}
 			choice = algorithm.chooseArm(a);
 			a_t = choice.split(" ")[0];
-		} while (articleId != a_t);
+			// System.out.println(articleId);
+			// System.out.println(a_t);
+
+		} while (!articleId .equals(a_t));
 		// Recover the reward from result...
 		algorithm.updateReward(choice, r_t);
 		return r_t;
