@@ -12,6 +12,17 @@ public class ExperimentRunner {
 	private int curFile;
 	private int t;
 
+	public static void main(String[] args) {
+		// Take in the input files and an algorithm, run UCB on it.
+		UCB algo = new UCB(0.8);
+		String dF = args;
+		int t = 10000;
+		ExperimentRunner expR = new ExperimentRunner(algo, dF, t);
+		double ctr = expR.runAlgorithm();
+		System.out.println("UCB achieved a CTR of " + ctr + " in "
+				+ t + "trials");
+	}
+
 	public ExperimentRunner(BanditAlgorithm algo, String[] dF, int t) {
 		this.algorithm = algo;
 		this.dataFiles = dF;
