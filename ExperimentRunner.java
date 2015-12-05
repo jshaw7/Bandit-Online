@@ -81,12 +81,14 @@ public class ExperimentRunner {
 			// Yank out the articles, send them to the bandit
 			// algorithm we're testing, forget it if our algorithm
 			// failed to choose the actual choice we made.
-			Collection<String> a = new ArrayList<String>();
+			List<String> a = new ArrayList<String>();
+			List<Article> articleList = new ArrayList<Article>();
 			for (int it = 2; it < articles.length; it++) {
 				// Put together the article colleciton a...
 				a.add(articles[it]);
+				//NEED TO ADD ARTICLES LIST ALSO so we can get feature vector
 			}
-			choice = algorithm.chooseArm(a);
+			choice = algorithm.chooseArm(a, articleList);
 			a_t = choice.split(" ")[0];
 			// System.out.println(articleId);
 			// System.out.println(a_t);

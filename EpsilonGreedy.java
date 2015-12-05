@@ -10,7 +10,7 @@ public class EpsilonGreedy implements BanditAlgorithm {
 	private HashMap<String, Integer> clicks;
 
 	// Choose an arm, given a choice of k arms.
-	public String chooseArm(Collection<String> arms) {
+	public String chooseArm(List<String> arms, List<Article> articles) {
 		boolean explore = Math.random();
 		if (explore 
 	}
