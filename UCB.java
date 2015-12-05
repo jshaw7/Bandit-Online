@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.List;
 import java.lang.Math;
 import java.util.Collection;
 class UCB implements BanditAlgorithm{
@@ -14,7 +15,7 @@ class UCB implements BanditAlgorithm{
 		this.alpha = alpha;
 	}
 
-	public String chooseArm(Collection<String> arms) {
+	public String chooseArm(List<String> arms, List<Article> articles) {
 		String bestArm = "";
 		double bestVal = Double.MIN_VALUE;
 
