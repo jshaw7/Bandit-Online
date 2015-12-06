@@ -16,23 +16,25 @@ public class LinUCB implements BanditAlgorithm {
 	}
 
 	@Override
-	public String chooseArm(List<String> arms, List<Article> articles) {
-		String bestArm = "";
+	public Article chooseArm(List<Article> articles) {
+		Article bestA = null;
 		double bestArmP = Double.MAX_VALUE;
 		RealMatrix Aa;
 		RealMatrix ba;
-		for (int armNum = 0; armNum < arms.size(); armNum++) {
-			String arm = arms.get(armNum);
-			double[] articleFeatureV = articles.get(armNum).getFeatures();
+		for (Article a : articles) {
+			
+			String aId = a.getId();
+			double[] articleFeatureV = a.getFeatures();
+
 			// If not contained, then make new identity matrix and zero vector
-			if (!AMap.containsKey(arm)) {
+			if (!AMap.containsKey(aId)) {
 				Aa = MatrixUtils
 						.createRealIdentityMatrix(articleFeatureV.length);
 				double[] zeros = { 0, 0, 0, 0, 0, 0 };
 				ba = MatrixUtils.createColumnRealMatrix(zeros);
 			} else {
-				Aa = AMap.get(arm);
-				ba = bMap.get(arm);
+				Aa = AMap.get(aId);
+				ba = bMap.get(aId);
 			}
 			// Make column vector out of features
 			RealMatrix xta = MatrixUtils
@@ -47,14 +49,14 @@ public class LinUCB implements BanditAlgorithm {
 			// Update argmax
 			if (newP > bestArmP) {
 				bestArmP = newP;
-				bestArm = arm;
+				bestA = a;
 			}
 		}
-		return bestArm;
+		return bestA;
 	}
 
 	@Override
-	public void updateReward(String arm, boolean clicked) {
+	public void updateReward(Article a, boolean clicked) {
 		// TODO Auto-generated method stub
 
 	}

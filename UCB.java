@@ -15,38 +15,52 @@ class UCB implements BanditAlgorithm{
 		this.alpha = alpha;
 	}
 
-	public String chooseArm(List<String> arms, List<Article> articles) {
-		String bestArm = "";
+	public Article chooseArm(List<Article> articles) {
+			
+		// keep track of best article
+		Article bestA = null;
 		double bestVal = Double.MIN_VALUE;
 
-		for(String arm : arms) {
-			if(counts.containsKey(arm)) {
-				double count = counts.get(arm);
+		for(Article a : articles) {
+			String aId = a.getId();
+
+			// if we have seen this article before
+			if(counts.containsKey(aId)) {
+				double count = counts.get(aId);
 				double confidence = alpha / Math.sqrt(count);
-				double mean = totalRewards.get(arm) / count;
+				double mean = totalRewards.get(aId) / count;
+
+				// if this article has a higher upper confidence bound than the best one so far
 				if(mean + confidence > bestVal) {
-					bestArm = arm;
+					bestA = a;
 					bestVal = mean + confidence;
 				} 
 			}
+
+			// if we have never seen an article before, assume it has infinite value
 			else {
-				bestArm = arm;
+				bestA = a;
 				bestVal = Double.MAX_VALUE;
 			}
 		}
 
-		return bestArm;
+		return bestA;
 	}
 
-	public void updateReward(String arm, boolean clicked) {
+	public void updateReward(Article a, boolean clicked) {
 		double value = clicked ? 1 : 0;
-		if(counts.containsKey(arm)) {
-			counts.put(arm, counts.get(arm) + 1);
-			totalRewards.put(arm, totalRewards.get(arm) + value);
+		String aId = a.getId();
+
+		// if we have seen this article before, update it
+		if(counts.containsKey(aId)) {
+			counts.put(aId, counts.get(aId) + 1);
+			totalRewards.put(aId, totalRewards.get(aId) + value);
 		}
+
+		//otherwise, add it
 		else {
-			counts.put(arm, 1);
-			totalRewards.put(arm, value);
+			counts.put(aId, 1);
+			totalRewards.put(aId, value);
 		}
 	}
 

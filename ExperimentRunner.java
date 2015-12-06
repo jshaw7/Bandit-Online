@@ -68,11 +68,10 @@ public class ExperimentRunner {
 	// Go through the data set and work through the files until we
 	// find the user/article combo we want.
 	private boolean runTrial() {	
-		// Read lines and parse until we find a_t...
+		// Read lines and parse until we find choice...
 		boolean r_t = false;
-		String a_t = "a";
 		String articleId = "b";
-		String choice = "";
+		Article choice = null;
 		do {
 			String curLine = readNextLine();
 			String[] articles = curLine.split(" \\|");
@@ -81,19 +80,16 @@ public class ExperimentRunner {
 			// Yank out the articles, send them to the bandit
 			// algorithm we're testing, forget it if our algorithm
 			// failed to choose the actual choice we made.
-			List<String> a = new ArrayList<String>();
 			List<Article> articleList = new ArrayList<Article>();
 			for (int it = 2; it < articles.length; it++) {
-				// Put together the article colleciton a...
-				a.add(articles[it]);
-				//NEED TO ADD ARTICLES LIST ALSO so we can get feature vector
-			}
-			choice = algorithm.chooseArm(a, articleList);
-			a_t = choice.split(" ")[0];
-			// System.out.println(articleId);
-			// System.out.println(a_t);
+				// Put together the article colleciton...
+				
+				articleList.add(new Article(articles[it]));
 
-		} while (!articleId .equals(a_t));
+			}
+			choice = algorithm.chooseArm(articleList);
+
+		} while (!articleId.equals(choice.getId()));
 		// Recover the reward from result...
 		algorithm.updateReward(choice, r_t);
 		return r_t;
