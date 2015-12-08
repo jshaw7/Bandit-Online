@@ -18,7 +18,7 @@ public class LinUCB implements BanditAlgorithm {
 	@Override
 	public Article chooseArm(List<Article> articles) {
 		Article bestA = null;
-		double bestArmP = Double.MAX_VALUE;
+		double bestArmP = Double.MIN_VALUE;
 		RealMatrix Aa;
 		RealMatrix ba;
 		for (Article a : articles) {
