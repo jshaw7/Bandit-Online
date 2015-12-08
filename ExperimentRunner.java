@@ -71,12 +71,14 @@ public class ExperimentRunner {
 		// Read lines and parse until we find choice...
 		boolean r_t = false;
 		String articleId = "b";
+		User user = null;
 		Article choice = null;
 		do {
 			String curLine = readNextLine();
 			String[] articles = curLine.split(" \\|");
 			articleId = articles[0].split(" ")[1];
 			r_t = articles[0].split(" ")[2].equals("1");
+			user = new User(articles[1]);
 			// Yank out the articles, send them to the bandit
 			// algorithm we're testing, forget it if our algorithm
 			// failed to choose the actual choice we made.
@@ -87,11 +89,11 @@ public class ExperimentRunner {
 				articleList.add(new Article(articles[it]));
 
 			}
-			choice = algorithm.chooseArm(articleList);
+			choice = algorithm.chooseArm(user, articleList);
 
 		} while (!articleId.equals(choice.getId()));
 		// Recover the reward from result...
-		algorithm.updateReward(choice, r_t);
+		algorithm.updateReward(user, choice, r_t);
 		return r_t;
 	}
 
