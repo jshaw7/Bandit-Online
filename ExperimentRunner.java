@@ -14,13 +14,13 @@ public class ExperimentRunner {
 
 	public static void main(String[] args) {
 		// Take in the input files and an algorithm, run UCB on it.
-		UCB algo = new UCB(0.8);
-		String dF = args;
+		LinUCB algo = new LinUCB(0.2);
+		String[] dF = args;
 		int t = 10000;
 		ExperimentRunner expR = new ExperimentRunner(algo, dF, t);
 		double ctr = expR.runAlgorithm();
 		System.out.println("UCB achieved a CTR of " + ctr + " in "
-				+ t + "trials");
+				+ t + " trials");
 	}
 
 	public ExperimentRunner(BanditAlgorithm algo, String[] dF, int t) {
@@ -68,27 +68,28 @@ public class ExperimentRunner {
 	// Go through the data set and work through the files until we
 	// find the user/article combo we want.
 	private boolean runTrial() {	
-		// Read lines and parse until we find a_t...
+		// Read lines and parse until we find choice...
 		boolean r_t = false;
-		String a_t = "a";
 		String articleId = "b";
-		String choice = "";
+		Article choice = null;
 		do {
 			String curLine = readNextLine();
-			String[] articles = curLine.split(" |");
+			String[] articles = curLine.split(" \\|");
 			articleId = articles[0].split(" ")[1];
 			r_t = articles[0].split(" ")[2].equals("1");
 			// Yank out the articles, send them to the bandit
 			// algorithm we're testing, forget it if our algorithm
 			// failed to choose the actual choice we made.
-			Collection<String> a = new ArrayList<String>();
+			List<Article> articleList = new ArrayList<Article>();
 			for (int it = 2; it < articles.length; it++) {
-				// Put together the article colleciton a...
-				a.add(articles[it]);
+				// Put together the article colleciton...
+				
+				articleList.add(new Article(articles[it]));
+
 			}
-			choice = algorithm.chooseArm(a);
-			a_t = choice.split(" ")[0];
-		} while (articleId != a_t);
+			choice = algorithm.chooseArm(articleList);
+
+		} while (!articleId.equals(choice.getId()));
 		// Recover the reward from result...
 		algorithm.updateReward(choice, r_t);
 		return r_t;

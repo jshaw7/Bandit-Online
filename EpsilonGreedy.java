@@ -10,12 +10,11 @@ public class EpsilonGreedy implements BanditAlgorithm {
 	private HashMap<String, Integer> clicks;
 
 	// Choose an arm, given a choice of k arms.
-	public String chooseArm(Collection<String> arms) {
-		boolean explore = Math.random();
-		if (explore 
+	public Article chooseArm(List<Article> articles) {
+		return null;
 	}
 
 	// Observe a reward when a given arm is pulled.
-	public void updateReward(String arm, boolean clicked) {
+	public void updateReward(Article a, boolean clicked) {
 	}
 }

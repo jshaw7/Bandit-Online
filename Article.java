@@ -1,10 +1,10 @@
 import java.util.*;
 
-public class ArticleInfo {
+public class Article {
 	private double[] features;
 	private String id;
 
-	public ArticleInfo(String info) {
+	public Article(String info) {
 		// Parse out the features!
 		String[] components = info.split(" ");
 		id = components[0];
@@ -20,7 +20,7 @@ public class ArticleInfo {
 		return id;
 	}
 
-	public double[] getFeatures {
+	public double[] getFeatures() {
 		return features;
 	}
 }
