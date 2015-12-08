@@ -14,7 +14,7 @@ public class ExperimentRunner {
 
 	public static void main(String[] args) {
 		// Take in the input files and an algorithm, run UCB on it.
-		UCB algo = new UCB(0.8);
+		LinUCB algo = new LinUCB(0.2);
 		String[] dF = args;
 		int t = 10000;
 		ExperimentRunner expR = new ExperimentRunner(algo, dF, t);

@@ -31,7 +31,9 @@ public class LinUCB implements BanditAlgorithm {
 				Aa = MatrixUtils
 						.createRealIdentityMatrix(articleFeatureV.length);
 				double[] zeros = { 0, 0, 0, 0, 0, 0 };
+				AMap.put(aId, Aa); //set as identity for now and we will update in reward
 				ba = MatrixUtils.createColumnRealMatrix(zeros);
+				bMap.put(aId, ba);
 			} else {
 				Aa = AMap.get(aId);
 				ba = bMap.get(aId);
@@ -57,7 +59,16 @@ public class LinUCB implements BanditAlgorithm {
 
 	@Override
 	public void updateReward(Article a, boolean clicked) {
-		// TODO Auto-generated method stub
+		String aId = a.getId();
+		RealMatrix xta = MatrixUtils
+				.createColumnRealMatrix(a.getFeatures());
+		AMap.put(aId, AMap.get(aId).add(xta.multiply(xta.transpose())));
+		if (clicked){
+			bMap.put(aId, bMap.get(aId).add(xta));
+		}
+		
+		
+		
 
 	}
 
