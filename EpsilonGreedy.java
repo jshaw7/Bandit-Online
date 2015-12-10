@@ -9,6 +9,12 @@ public class EpsilonGreedy implements BanditAlgorithm {
 	private HashMap<String, Integer> trials;
 	private HashMap<String, Integer> clicks;
 
+	public EpsilonGreedy(double eps) {
+		epsilon = eps;
+		trials = new HashMap<String, Integer>();
+		clicks = new HashMap<String, Integer>();
+	}
+
 	// Choose an arm, given a choice of k arms.
 	public Article chooseArm(User user, List<Article> articles) {
 		if (Math.random() < epsilon) {
