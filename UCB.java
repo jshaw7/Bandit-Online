@@ -15,7 +15,7 @@ class UCB implements BanditAlgorithm{
 		this.alpha = alpha;
 	}
 
-	public Article chooseArm(List<Article> articles) {
+	public Article chooseArm(User user, List<Article> articles) {
 			
 		// keep track of best article
 		Article bestA = null;
@@ -47,7 +47,7 @@ class UCB implements BanditAlgorithm{
 		return bestA;
 	}
 
-	public void updateReward(Article a, boolean clicked) {
+	public void updateReward(User user, Article a, boolean clicked) {
 		double value = clicked ? 1 : 0;
 		String aId = a.getId();
 

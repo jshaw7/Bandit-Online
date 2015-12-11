@@ -13,7 +13,7 @@ public class ExperimentRunner {
 
 	public static void main(String[] args) {
 		// Take in the input files and an algorithm, run UCB on it.
-		BanditAlgorithm algo = new LinUCB(0.2);
+		BanditAlgorithm algo = new HybridLinUCB(0.4);
 		//BanditAlgorithm algo = new EpsilonGreedy(0.3);
 		String[] dF = args;
 		int t = 10000;
