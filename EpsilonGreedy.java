@@ -17,7 +17,7 @@ public class EpsilonGreedy implements BanditAlgorithm {
 
 	// Choose an arm, given a choice of k arms.
 	public Article chooseArm(User user, List<Article> articles) {
-		if (Math.random() < epsilon) {
+		if (Math.random() > epsilon) {
 			// Greedy choice...
 			double best = -1.0;
 			Article bestArm = null;
@@ -41,8 +41,8 @@ public class EpsilonGreedy implements BanditAlgorithm {
 		// Just make sure we have values for article a...
 		getReward(a);
 		// Update values.
-		trials.put(a.getId(), trials.get(a) + 1);
-		clicks.put(a.getId(), clicks.get(a) + 1);
+		trials.put(a.getId(), trials.get(a.getId()) + 1);
+		clicks.put(a.getId(), clicks.get(a.getId()) + 1);
 	}
 
 	// Get reward for arm...
