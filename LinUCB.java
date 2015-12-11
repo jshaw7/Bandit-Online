@@ -5,6 +5,10 @@ import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
 public class LinUCB implements BanditAlgorithm {
+	/**
+	 * Implements LinUCB from Li, 2010
+	 * Written by @smsachs
+	 */
 	HashMap<String, RealMatrix> AMap;
 	HashMap<String, RealMatrix> bMap;
 	double alpha;
@@ -16,7 +20,7 @@ public class LinUCB implements BanditAlgorithm {
 	}
 
 	@Override
-	public Article chooseArm(List<Article> articles) {
+	public Article chooseArm(User user, List<Article> articles) {
 		Article bestA = null;
 		double bestArmP = Double.MIN_VALUE;
 		RealMatrix Aa;
@@ -58,7 +62,7 @@ public class LinUCB implements BanditAlgorithm {
 	}
 
 	@Override
-	public void updateReward(Article a, boolean clicked) {
+	public void updateReward(User user, Article a, boolean clicked) {
 		String aId = a.getId();
 		RealMatrix xta = MatrixUtils
 				.createColumnRealMatrix(a.getFeatures());
