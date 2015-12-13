@@ -10,17 +10,36 @@ public class ExperimentRunner {
 	private BufferedReader[] dataReaders;
 	private String[] dataFiles;
 	private int curFile;
+	// Approx. 45 million records... leave off 100K for safety's sake.
+	private static int numRecords = 44900000;
+	private static double trainingRatio = 0.2;
 
 	public static void main(String[] args) {
 		// Take in the input files and an algorithm, run UCB on it.
 		BanditAlgorithm algo = new HybridLinUCB(0.4);
 		//BanditAlgorithm algo = new EpsilonGreedy(0.3);
 		String[] dF = args;
-		int t = 10000;
-		ExperimentRunner expR = new ExperimentRunner(algo, dF);
-		double ctr = expR.runAlgorithm(t);
-		System.out.println("UCB achieved a CTR of " + ctr + " in "
-				+ t + " trials");
+		double pct = 0.3;
+		double[] ctr = ExperimentRunner.runExperiment(algo, pct, dF);
+		System.out.println("Eps-greedy (learning) achieved a CTR of "
+				+ ctr[0] + " using " + pct + " of the data.");
+		System.out.println("Eps-greedy (deployment) achieved a CTR of "
+				+ ctr[1] + " using " + pct + " of the data.");
+	}
+
+	public static double[] runExperiment(BanditAlgorithm algo,
+			double pctData, String[] dF) {
+		// Run algo on pctData of the input data...
+		ExperimentRunner expRunner = new ExperimentRunner(algo, dF);
+		int totalRecords = (int) (numRecords * pctData);
+		int trainRecords = (int) (totalRecords * trainingRatio);
+		int testRecords = totalRecords - trainRecords;
+		// Run the algorithm and store both the learning and deployment
+		// CTR values.
+		double[] rv = new double[2];
+		rv[0] = expRunner.runAlgorithm(trainRecords);
+		rv[1] = expRunner.runAlgorithm(testRecords);
+		return rv;
 	}
 
 	public ExperimentRunner(BanditAlgorithm algo, String[] dF) {
@@ -47,15 +66,16 @@ public class ExperimentRunner {
 		}
 	}
 
+	private int recordsSeen;
 	// Run the experiment! Keep reading lines from the files and running
 	// the bandit algorithm provided.
 	public double runAlgorithm(int k) {
 		// Keep track of the click-through rate...
 		int numTrials = 0;
 		int numClicks = 0;
+		recordsSeen = 0;
 		// Only run t trials total...
-		while(numTrials < k) {
-			numTrials++;
+		while(recordsSeen < k) {
 			// Recover the reward for this arm...
 			boolean r_t = runTrial();
 			if (r_t) {
@@ -83,6 +103,11 @@ public class ExperimentRunner {
 		Article choice = null;
 		do {
 			String curLine = readNextLine();
+			recordsSeen++;
+			// If we're out of data, readNextLine() returns null.
+			if (curLine == null) {
+				return false;
+			}
 			String[] articles = curLine.split(" \\|");
 			articleId = articles[0].split(" ")[1];
 			r_t = articles[0].split(" ")[2].equals("1");
